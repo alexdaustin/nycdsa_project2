@@ -87,6 +87,13 @@ ts_shows <- ts_shows %>%
          return_3 = round((viewers - pmva_3)/pmva_3, 4),
          return_5 = round((viewers - pmva_5)/pmva_5, 4))
 
+ts_shows <- ts_shows %>%
+  mutate(tv_year =
+           ifelse(month(air_date) < 9, year(air_date)-1, year(air_date)),
+         .after=air_date)
+
 summary(ts_shows)
+
+write_csv(ts_shows, "ts_shows.csv")
 
 
