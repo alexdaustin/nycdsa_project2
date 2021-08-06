@@ -1,4 +1,5 @@
 library(tidyverse)
+library(lubridate)
 library(extRemes)
 
 ts_shows <- read_csv("ts_shows.csv")

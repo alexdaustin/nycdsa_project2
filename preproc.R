@@ -89,7 +89,7 @@ ts_shows <- ts_shows %>%
 
 ts_shows <- ts_shows %>%
   mutate(tv_year =
-           ifelse(month(air_date) < 9, year(air_date)-1, year(air_date)),
+           ifelse(month(air_date) < 8, year(air_date)-1, year(air_date)),
          .after=air_date)
 
 summary(ts_shows)
