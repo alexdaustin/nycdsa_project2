@@ -60,55 +60,56 @@ navbarPage("The One with the Data", theme = bs_theme(bootswatch = "cyborg"),
            ),
            tabPanel("Extremes", 
                     fluidPage(
-                      sidebarLayout(position = "right", 
-                                    sidebarPanel(
-                                      radioButtons(
-                                        inputId="shows_ext",
-                                        label="Select your show(s):", 
-                                        selected="All",
-                                        choices = c("All", "Sitcoms", "Dramas", 
-                                                    show_names)),
-                                      radioButtons(
-                                        inputId="comp_ext",
-                                        label="Episodes for comparison:", 
-                                        selected="3",
-                                        choices = c(1, 3, 5))),
-                                    mainPanel(
-                                      fluidRow(column(width=4,
-                                      div(class="card border-primary mb-3", style="max-width: 20rem;",
-                                          div(class="card-body",
-                                              p(class="card-text", "We use a block maxima approach to fit a generalized extreme 
-                                                         value distribution to our data. This is done using the R package ", em("extRemes"), ". 
-                                                         A block is a season. Consequently, the data being fitted corresponds exactly to 
-                                                         that in the plots under tab ", em("Maxima"), ". The selection made in ", 
-                                                em("episodes for comparison"), "on the right plays the same role as it does in that tab.")
-                                          )
-                                      ),div(class="card border-success mb-3", style="max-width: 20rem;",
-                                            div(class="card-body",
-                                                p(class="card-text", "Choose an integer ", em("n"), ". The estimate returned is the maximum 
+                      fluidRow(
+                        column(4, div(class="card border-success mb-3", style="max-width: 20rem;",
+                                      div(class="card-body",
+                                          p(class="card-text", "Choose an integer ", em("n"), ". The estimate returned is the maximum 
                                                 increase you can expect to see in a run of ", em("n"), "seasons. Here, ", em("increase"), 
-                                                  " has the same meaning as under the ", em("Maxima"), "tab. Alternatively, you can consider 
+                                            " has the same meaning as under the ", em("Maxima"), "tab. Alternatively, you can consider 
                                                   ", em("1/n"), "to be the probability of an increase of this magnitude in a given season.", 
-                                                  em("Example: with n = 4, an estimate of 0.9 means that over a run of four seasons you would
+                                            em("Example: with n = 4, an estimate of 0.9 means that over a run of four seasons you would
                                                   expect to see a jump in viewers of 90% no more than once."))
-                                            )
-                                      )),
-                                      column(width=4), 
-                                      div(class="card text-white bg-success mb-3", style="max-width: 20rem;",
-                                          div(class="card-body",
-                                              numericInput(inputId="n", label="n = ", 2,
-                                                           1, 100, 1),
-                                              p(class="card-text", "We use a block maxima approach to fit a generalized extreme 
+                                      ) 
+                        ), div(class="card border-primary mb-3", style="max-width: 20rem;",
+                              div(class="card-body",
+                                  p(class="card-text", "We use a block maxima approach to fit a generalized extreme 
                                                          value distribution to our data. This is done using the R package ", em("extRemes"), ". 
                                                          A block is a season. Consequently, the data being fitted corresponds exactly to 
                                                          that in the plots under tab ", em("Maxima"), ". The selection made in ", 
-                                                em("episodes for comparison"), "on the right plays the same role as it does in that tab.")
-                                          )
-                                      )
-                                      )
-                                    )
+                                    em("episodes for comparison"), "on the right plays the same role as it does in that tab.")
+                              )
+                        )),
+                        column(5, tags$table(class="table table-hover",
+                                             tags$tbody(
+                                               tags$tr(class="table-success", 
+                                                       tags$td("Choose ", em("n"), ":"), 
+                                                       tags$td(numericInput(inputId="n", label=NULL, 2,
+                                                                            1, 100, 1, width=100))
+                                               ),
+                                               tags$tr(class="table-success", 
+                                                       tags$td("Estimate:"), 
+                                                       tags$td()
+                                               ),
+                                               tags$tr(class="table-success", 
+                                                       tags$td("95% confidence interval:"), 
+                                                       tags$td()
+                                               )
+                                             )
+                        )),
+                        column(3, radioButtons(
+                          inputId="shows_ext",
+                          label="Select your show(s):", 
+                          selected="All",
+                          choices = c("All", "Sitcoms", "Dramas", 
+                                      show_names)),
+                          radioButtons(
+                            inputId="comp_ext",
+                            label="Episodes for comparison:", 
+                            selected="3",
+                            choices = c(1, 3, 5)))
                       )
                     )
            )
 )
+
 
