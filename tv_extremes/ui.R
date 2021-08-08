@@ -28,20 +28,57 @@ navbarPage("The One with the Data", theme = bs_theme(bootswatch = "cyborg"),
                       )
                     )
            ),
-           tabPanel("Explore"),
-           tabPanel("Analyze"),
+           tabPanel("Viewers",
+                    fluidPage(
+                      fluidRow(
+                        column(8, 
+                               tabsetPanel(type = "tabs",
+                                           tabPanel("Plot", plotOutput(outputId ="view_plot")),
+                                           tabPanel("Descriptive", tableOutput(outputId="view_desc")),
+                                           tabPanel("Top 5", tableOutput(outputId="view_top_5"))
+                               )),
+                        column(4, radioButtons(
+                          inputId="shows_view",
+                          label="Select your show(s):", 
+                          selected="Friends",
+                          choices = show_names))
+                      )
+                    )),
+           tabPanel("Increases",
+                    fluidPage(
+                      fluidRow(
+                        column(8, 
+                               tabsetPanel(type = "tabs",
+                                           tabPanel("Plot", plotOutput(outputId ="inc_plot")),
+                                           tabPanel("Descriptive", tableOutput(outputId="inc_desc")),
+                                           tabPanel("Top 5", tableOutput(outputId="inc_top_5"))
+                               ),
+                               p(class="text-info", "See the blue text under tab ", em("Maxima"), "for an 
+                                 explanation of ", em("increase"), "and the use of ", em("episodes for comparison."))),
+                        column(4, radioButtons(
+                          inputId="shows_inc",
+                          label="Select your show(s):", 
+                          selected="Friends",
+                          choices = show_names), 
+                          radioButtons(
+                            inputId="comp_inc",
+                            label="Episodes for comparison:", 
+                            selected="3",
+                            choices = c(1, 3, 5)))
+                      )
+                    )),
            tabPanel("Maxima",
                     fluidPage(
                       sidebarLayout(position = "right", 
                                     sidebarPanel(
                                       radioButtons(
-                                        inputId="shows_ext",
+                                        inputId="shows_max",
                                         label="Select your show(s):", 
                                         selected="All",
                                         choices = c("All", "Sitcoms", "Dramas", 
                                                     show_names)),
                                       radioButtons(
-                                        inputId="comp_ext",
+                                        inputId="comp_max",
                                         label="Episodes for comparison:", 
                                         selected="3",
                                         choices = c(1, 3, 5))),
@@ -71,31 +108,33 @@ navbarPage("The One with the Data", theme = bs_theme(bootswatch = "cyborg"),
                                                   expect to see a jump in viewers of 90% no more than once."))
                                       ) 
                         ), div(class="card border-primary mb-3", style="max-width: 20rem;",
-                              div(class="card-body",
-                                  p(class="card-text", "We use a block maxima approach to fit a generalized extreme 
-                                                         value distribution to our data. This is done using the R package ", em("extRemes"), ". 
+                               div(class="card-body",
+                                   p(class="card-text", "We use a block maxima approach to fit a generalized extreme 
+                                                         value (GEV) distribution to our data. This is done using the R package ", em("extRemes"), ". 
                                                          A block is a season. Consequently, the data being fitted corresponds exactly to 
                                                          that in the plots under tab ", em("Maxima"), ". The selection made in ", 
-                                    em("episodes for comparison"), "on the right plays the same role as it does in that tab.")
-                              )
+                                     em("episodes for comparison"), "on the right plays the same role as it does in that tab.")
+                               )
                         )),
                         column(5, tags$table(class="table table-hover",
                                              tags$tbody(
                                                tags$tr(class="table-success", 
                                                        tags$td("Choose ", em("n"), ":"), 
                                                        tags$td(numericInput(inputId="n", label=NULL, 2,
-                                                                            1, 100, 1, width=100))
+                                                                            2, 100, 1, width=100))
                                                ),
                                                tags$tr(class="table-success", 
                                                        tags$td("Estimate:"), 
-                                                       tags$td()
+                                                       tags$td(textOutput(outputId="est"))
                                                ),
                                                tags$tr(class="table-success", 
                                                        tags$td("95% confidence interval:"), 
-                                                       tags$td()
+                                                       tags$td(textOutput(outputId="ci"))
                                                )
                                              )
-                        )),
+                        ),
+                        plotOutput(outputId ="density_plot")
+                        ),
                         column(3, radioButtons(
                           inputId="shows_ext",
                           label="Select your show(s):", 
